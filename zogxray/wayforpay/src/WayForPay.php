@@ -1,5 +1,7 @@
 <?php
 
+namespace Zogxray\WayForPay;
+
 /**
  * Class WayForPay
  */
