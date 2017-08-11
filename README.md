@@ -22,7 +22,7 @@ _The package supports auto-discovery, so if you use Laravel 5.5 or later you may
 
 #### Register Facades _(optional)_
 
-If you like facades, you may also append the `Responder` and `Transformer` facades to the `aliases` key:
+If you like facades, you may also append the `Wayforpay` facade to the `aliases` key:
 
 ```php
 'Wayforpay' => Zogxray\WayForPay\WayForPayFacade::class,
