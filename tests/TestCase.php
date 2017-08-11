@@ -1,8 +1,8 @@
 <?php
-namespace  Zogxray\WayForPay\Test;
-use  Zogxray\WayForPay\TestCase as OrchestraTestCase;
-use Zogxray\WayForPay\WayForPayFacade;
-use Zogxray\WayForPay\WayForPayServiceProvider;
+namespace  Zogxray\Wayforpay\Test;
+use  Zogxray\Wayforpay\TestCase as OrchestraTestCase;
+use Zogxray\Wayforpay\WayForPayFacade;
+use Zogxray\Wayforpay\WayForPayServiceProvider;
 
 class TestCase extends OrchestraTestCase
 {

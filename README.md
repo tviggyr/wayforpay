@@ -13,7 +13,7 @@ $ composer require zogxray/wayforpay
 Append the following line to the `providers` key in `config/app.php` to register the package:
 
 ```php
-Zogxray\WayForPay\WayForPayServiceProvider::class,
+Zogxray\Wayforpay\WayForPayServiceProvider::class,
 ```
 
 ***
@@ -25,7 +25,7 @@ _The package supports auto-discovery, so if you use Laravel 5.5 or later you may
 If you like facades, you may also append the `Wayforpay` facade to the `aliases` key:
 
 ```php
-'Wayforpay' => Zogxray\WayForPay\WayForPayFacade::class,
+'Wayforpay' => Zogxray\Wayforpay\WayForPayFacade::class,
 ```
 
 #### Publish Package Assets _(optional)_
@@ -33,5 +33,5 @@ If you like facades, you may also append the `Wayforpay` facade to the `aliases`
 You may additionally publish the package configuration and language file using the `vendor:publish` Artisan command:
 
 ```shell
-php artisan vendor:publish --provider="Zogxray\WayForPay\WayForPayServiceProvider"
+php artisan vendor:publish --provider="Zogxray\Wayforpay\WayForPayServiceProvider"
 ```
