@@ -27,29 +27,15 @@ class WayForPay
     private $_merchant_password;
     private $_action;
     private $_params;
-    private $_charset;
+    private $_charset = self::DEFAULT_CHARSET;
 
     /**
      * Init
-     *
-     * @param $merchant_account
-     * @param $merchant_password
-     * @param string $charset
-     * @throws InvalidArgumentException
      */
-    public function __construct($merchant_account, $merchant_password, $charset = self::DEFAULT_CHARSET)
+    public function __construct()
     {
-        if (!is_string($merchant_account) || $merchant_account === '') {
-            throw new InvalidArgumentException('Merchant account must be string and not empty');
-        }
-
-        if (!is_string($merchant_password) || $merchant_password === '') {
-            throw new InvalidArgumentException('Merchant password must be string and not empty');
-        }
-
-        $this->_merchant_account = $merchant_account;
-        $this->_merchant_password = $merchant_password;
-        $this->_charset = $charset;
+        $this->_merchant_account = config('wayforpay.merchantAccount');
+        $this->_merchant_password =config('wayforpay.merchantSecretKey');
     }
 
     /**
