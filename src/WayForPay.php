@@ -511,7 +511,7 @@ class WayForPay
         return $button;
     }
 
-    public function buildWidgetDatn(array $fields)
+    public function buildWidgetData(array $fields)
     {
         $this->_prepare(self::MODE_PURCHASE, $fields);
 
