@@ -1,6 +1,7 @@
 <?php
 
 namespace Zogxray\Wayforpay;
+use Doctrine\Instantiator\Exception\InvalidArgumentException;
 
 /**
  * Class WayForPay
