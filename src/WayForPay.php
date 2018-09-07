@@ -203,6 +203,25 @@ class WayForPay
     }
 
     /**
+   * @param $response
+   * @return bool|string
+   */
+  public function isPaymentValid($response)
+  {
+    if (!isset($response['merchantSignature']) && isset($response['reason'])) {
+      return $response['reason'];
+    }
+    $sign = $this->getResponseSignature($response);
+    if ($sign != $response['merchantSignature']) {
+      return 'An error has occurred during payment';
+    }
+    if ($response['transactionStatus'] == self::ORDER_APPROVED) {
+      return true;
+    }
+    return false;
+  }
+    
+    /**
      * Check required fields
      *
      * @param $fields
