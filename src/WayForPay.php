@@ -24,6 +24,8 @@ class WayForPay
     const MODE_CREATE_INVOICE = 'CREATE_INVOICE';
     const MODE_P2_PHONE       = 'P2_PHONE';
 
+    const ORDER_APPROVED = 'Approved';
+
     private $_merchant_account;
     private $_merchant_password;
     private $_action;
@@ -203,24 +205,82 @@ class WayForPay
     }
 
     /**
-   * @param $response
-   * @return bool|string
-   */
-  public function isPaymentValid($response)
-  {
-    if (!isset($response['merchantSignature']) && isset($response['reason'])) {
-      return $response['reason'];
+     * @param $response
+     * @return bool|string
+     */
+    public function isPaymentValid($response)
+    {
+        if (!isset($response['merchantSignature']) && isset($response['reason'])) {
+            return $response['reason'];
+        }
+        $sign = $this->getResponseSignature($response);
+
+        if ($sign != $response['merchantSignature']) {
+            throw new InvalidArgumentException('An error has occurred during payment');
+        }
+        if ($response['transactionStatus'] == self::ORDER_APPROVED) {
+            return true;
+        }
+        return false;
     }
-    $sign = $this->getResponseSignature($response);
-    if ($sign != $response['merchantSignature']) {
-      return 'An error has occurred during payment';
+
+    /**
+     * @param $options
+     * @return string
+     */
+    public function getResponseSignature($options)
+    {
+        return $this->getSignature($options, $this->_getResponseFields());
     }
-    if ($response['transactionStatus'] == self::ORDER_APPROVED) {
-      return true;
+
+    /**
+     * @param $option
+     * @param $keys
+     * @return string
+     */
+    public function getSignature($option, $keys)
+    {
+        $data = array();
+        foreach ($keys as $dataKey) {
+            if (!isset($option[$dataKey])) {
+                continue;
+            }
+
+            if (is_array($option[$dataKey])) {
+                foreach ($option[$dataKey] as $v) {
+                    $data[] = $v;
+                }
+            } else {
+                $data[] = $option[$dataKey];
+            }
+        }
+        return hash_hmac('md5', implode(self::FIELDS_DELIMITER, $data), $this->_merchant_password);
     }
-    return false;
-  }
-    
+
+
+    /**
+     * @param array $data
+     * @return string
+     */
+    public function getAnswerToGateWay($data)
+    {
+        $time = time();
+        $responseToGateway = array(
+            'orderReference' => $data['orderReference'],
+            'status' => 'accept',
+            'time' => $time
+        );
+        $sign = array();
+        foreach ($responseToGateway as $dataKey => $dataValue) {
+            $sign [] = $dataValue;
+        }
+
+        $sign = hash_hmac('md5', implode(self::FIELDS_DELIMITER, $sign), $this->_merchant_password);
+        $responseToGateway['signature'] = $sign;
+
+        return json_encode($responseToGateway);
+    }
+
     /**
      * Check required fields
      *
@@ -498,6 +558,25 @@ class WayForPay
     }
 
     /**
+     * Response Fields
+     *
+     * @return array
+     */
+    private function _getResponseFields()
+    {
+        return array(
+            'merchantAccount',
+            'orderReference',
+            'amount',
+            'currency',
+            'authCode',
+            'cardPan',
+            'transactionStatus',
+            'reasonCode'
+        );
+    }
+
+    /**
      * @param array $fields Widget(https://wiki.wayforpay.com/pages/viewpage.action?pageId=852091)
      * @param null $callbackFunction JavaScript callback function called on widget response
      * @return string
@@ -537,4 +616,3 @@ class WayForPay
         return response()->json(['data' => $this->_params]);
     }
 }
-
