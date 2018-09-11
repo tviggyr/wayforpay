@@ -136,7 +136,7 @@ class WayForPay
     {
         $this->_prepare(self::MODE_PURCHASE, $fields);
 
-        $form = sprintf('<form method="POST" action="%s" accept-charset="utf-8">', self::PURCHASE_URL);
+        $form = sprintf('<form method="POST" action="%s" id="wayforpay" accept-charset="utf-8">', self::PURCHASE_URL);
 
         foreach ($this->_params as $key => $value) {
             if (is_array($value)) {
